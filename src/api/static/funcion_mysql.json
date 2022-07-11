@@ -1,0 +1,9 @@
+{
+    "nombre_funcion": "guarda_dataframe_en_mysql",
+    "funcion": "def guarda_dataframe_en_mysql(df, parametros, nombre_tabla, imports=False):\n    \"Dados un dataframe y los parametros de conexi\u00f3n a una base de datos la funci\u00f3n guarda el dataframe en mysql y cierra la conexi\u00f3n.\"\n    if imports:\n        from sqlalchemy import create_engine\n        from sqlalchemy.pool import NullPool\n    sql_alchemy = 'mysql+pymysql://' + parametros['USER'] + ':' + parametros['PASSWORD'] + '@' + parametros['IP_DNS'] + ':' + str(parametros['PORT']) + '/' + parametros['BD_NAME']\n    engine = create_engine(sql_alchemy, poolclass=NullPool)\n    conn = engine.connect()\n    print(\"Conectado al servidor de MySQL a la base de datos [\" + parametros['BD_NAME'] + \"]\")\n    try:\n        df.to_sql(name=nombre_tabla, con=conn, if_exists='fail', index=False)\n        print('El dataframe se ha guardado correctamente')\n    except:\n        print('No se ha podido guarda la tabla')\n    conn.close()\n    engine.dispose()\n    print(\"Desconectado del servidor de MySQL de la base de datos [\" + parametros['BD_NAME'] + \"]\")",
+    "parametros": [
+        "dataframe",
+        "nombre_tabla",
+        "imports"
+    ]
+}
